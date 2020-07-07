@@ -41,7 +41,7 @@ void BasicQcTask::initialize(o2::framework::InitContext& /*ctx*/)
     ILOG(Info) << "Custom parameter - myOwnKey: " << param->second << ENDM;
   }
 
-  mDetElemID = new TH1F("mDetElemID", "ID of detector element", 80, 0, 80);
+  mDetElemID = new TH1F("mDetElemID", "ID of detector element", 81, -0.5, 80.5);
   getObjectsManager()->startPublishing(mDetElemID);
   try {
     getObjectsManager()->addMetadata(mDetElemID->GetName(), "custom", "34");
@@ -69,6 +69,11 @@ void BasicQcTask::monitorData(o2::framework::ProcessingContext& ctx)
   auto msg = ctx.inputs().get("digits");
   gsl::span<const o2::mid::ColumnData> patterns = o2::framework::DataRefUtils::as<const o2::mid::ColumnData>(msg);
 
+  // Loop on stripPatterns
+  for (auto& col : patterns) {
+    int deIndex = col.deId;
+    mDetElemID->Fill(deIndex);
+  }
 }
 
 void BasicQcTask::endOfCycle()
