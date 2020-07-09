@@ -42,7 +42,7 @@
       }
     },
     "checks": {
-      "BasicQcCheck": {
+      "QcCheck1": {
         "active": "true",
         "dataSource": [{
           "type": "Task",
